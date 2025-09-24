@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <title>Document</title>
+</head>
+<body>
+    
+
+    <!-- shop content -->
+    <div class="card-products-container">
+        <div class="card-products" id="shopContent"></div>
+    </div>
+    <!--cart btn-->
+    <div class="cart-btn" id="cart-btn">🛒
+    <!--cart counter-->
+    <div class="cart-counter" id="cart-counter">0</div>
+    </div>
+    <!--modal-->
+    <div class="modal-overlay" id="modal-overlay"></div>
+    <div class="modal-container" id="modal-container"></div>
+    <script src="https://sdk.mercadopago.com/js/v2"></script>
+    <script src="./js/products.js"></script>
+    <script src="./js/index.js"></script>
+    <script src="./js/mp_config.js"></script>
+    <script src="./js/cart.js"></script>
+    
+    <!-- Script para manejar el retorno del pago -->
+    <script>
+        // Verificar si hay parámetros de pago en la URL
+        const urlParams = new URLSearchParams(window.location.search);
+        const paymentStatus = urlParams.get('payment');
+        
+        if (paymentStatus) {
+            let message = '';
+            let alertType = '';
+            
+            switch(paymentStatus) {
+                case 'success':
+                    message = '¡Pago realizado exitosamente! Gracias por tu compra.';
+                    alertType = 'success';
+                    break;
+                case 'failure':
+                    message = 'El pago no pudo ser procesado. Por favor, intenta nuevamente.';
+                    alertType = 'error';
+                    break;
+                case 'pending':
+                    message = 'Tu pago está siendo procesado. Te notificaremos cuando se complete.';
+                    alertType = 'info';
+                    break;
+            }
+            
+            if (message) {
+                // Mostrar mensaje al usuario
+                alert(message);
+                
+                // Limpiar la URL (opcional)
+                const cleanUrl = window.location.protocol + "//" + window.location.host + window.location.pathname;
+                window.history.replaceState({}, document.title, cleanUrl);
+            }
+        }
+    </script>
+</body>
+
+</html>

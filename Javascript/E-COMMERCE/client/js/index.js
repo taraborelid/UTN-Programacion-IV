@@ -12,7 +12,7 @@ products.forEach((product) => {
     <img src="${product.image}" alt="${product.name}">
     <h3>${product.name}</h3>
     <p>Price: $${product.price}</p>
-    <p>Quantity: ${product.quantity}</p>
+    <p>Stock: ${product.stock}</p>
     `;
     shopContent.appendChild(content);
 
@@ -22,13 +22,26 @@ products.forEach((product) => {
     content.append(buyButton);
 
     buyButton.addEventListener("click", () =>{
-        cart.push({ //push hace que el producto se agregue al carrito
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            quantity: product.quantity,
-            image: product.image
-        });
-        console.log(cart);
+        const repeat = cart.some((repeatProduct) => repeatProduct.id === product.id);
+        if (repeat) {
+            cart.map((cartProduct) => {
+                if (cartProduct.id === product.id) {
+                    cartProduct.quantity += product.quantity;
+                    displayCartCounter();
+                }
+                return cartProduct;
+            });
+        } else {
+            cart.push({ //push hace que el producto se agregue al carrito
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                quantity: product.quantity,
+                image: product.image,
+                stock: product.stock
+            });
+            console.log(cart);
+            displayCartCounter();
+        }
     });
 });
